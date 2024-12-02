@@ -5,5 +5,4 @@ import org.springframework.data.jpa.repository.support.JpaRepositoryImplementati
 import ru.hogwarts.schoolloohcs.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    //
 }
