@@ -22,7 +22,6 @@ public interface StudentService {
 
     //Поиск студентов по возрасту
     List<Student> findByAge(int age);
-
     //Очистка базы данных
     String clearDB();
 }

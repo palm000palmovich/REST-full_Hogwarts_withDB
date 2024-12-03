@@ -11,10 +11,14 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/student")
 public class StudentController {
+    private final StudentService studentService;
     @Autowired
-    private StudentService studentService;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
-    //Output of all students
+
+    //Output of students
     @GetMapping
     public List<Student> allStudents(){
         return studentService.getAllStudents();
@@ -38,9 +42,9 @@ public class StudentController {
 
     //POST
     @PostMapping
-    public Student createStud(
+    public ResponseEntity<Student> createStud(
             @RequestBody Student student){
-        return studentService.createStudent(student);
+        return ResponseEntity.ok(studentService.createStudent(student));
     }
 
     //PUT

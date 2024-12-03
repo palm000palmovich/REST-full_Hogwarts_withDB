@@ -10,28 +10,33 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    //Вывод всех студентов
+    @Autowired
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+
+    //Output students
     @Override
     public List<Student> getAllStudents(){
          return studentRepository.findAll();
     }
 
-    //Создание студента
+    //Creating students
     @Override
     public Student createStudent(Student student){
         return studentRepository.save(student);
     }
 
-    //Поиск студента по id
+    //Find students by id
     @Override
     public Student findStudent(long id){
         return studentRepository.findById(id).orElse(null);
     }
 
-    //Изменение студента
+    //Edit students
     @Override
     public Student editStudent(long id, Student student){
         Student studForChange = studentRepository.findById(id).orElse(null);
@@ -42,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
         } return null;
     }
 
-    //Удаление студента
+    //Delete students
     @Override
     public Student deleteStudent(Long id){
         Student stud = studentRepository.findById(id).get();
@@ -50,7 +55,7 @@ public class StudentServiceImpl implements StudentService {
         return stud;
     }
 
-    //Поиск студентов по возрасту
+    //Find students by age
     @Override
     public List<Student> findByAge(int age){
         List<Student> studentsInAge = studentRepository.findAll()
@@ -60,7 +65,7 @@ public class StudentServiceImpl implements StudentService {
         return studentsInAge;
     }
 
-    //Полная очистка таблицы
+    //Full reset
 
     @Override
     public String clearDB(){
