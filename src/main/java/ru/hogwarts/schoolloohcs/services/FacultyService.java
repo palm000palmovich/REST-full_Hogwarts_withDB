@@ -10,16 +10,13 @@ public interface FacultyService {
 
     //Create faculty
     Faculty createFaculty(Faculty faculty);
-
     //Delete faculty
     void deleteFaculty(long id);
 
     //Edit faculty
     Faculty editFaculty(long id, Faculty faculty);
-
     //Find by id
     Faculty findById(long id);
-
     //Facultys with determine color
     List<Faculty> facultysByColor(String color);
 

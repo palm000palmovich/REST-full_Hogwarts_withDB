@@ -13,13 +13,10 @@ public interface StudentService {
 
     //Поиск студента по id
     Student findStudent(long id);
-
     //Изменение студента
     Student editStudent(long id, Student student);
-
     //Удаление студента
     Student deleteStudent(Long id);
-
     //Поиск студентов по возрасту
     List<Student> findByAge(int age);
     //Очистка базы данных

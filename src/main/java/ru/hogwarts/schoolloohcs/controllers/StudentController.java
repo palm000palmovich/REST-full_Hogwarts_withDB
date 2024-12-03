@@ -16,8 +16,6 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
-
-
     //Output of students
     @GetMapping
     public List<Student> allStudents(){
@@ -29,7 +27,6 @@ public class StudentController {
     public String ckearDB(){
         return studentService.clearDB();
     }
-
 
     //GET
     @GetMapping("/{id}")

@@ -31,7 +31,6 @@ public class FacultyController {
             @RequestBody Faculty faculty){
         return ResponseEntity.ok(facultyService.createFaculty(faculty));
     }
-
     //GET
     @GetMapping(path = "/{id}")
     public ResponseEntity<Faculty> getById(
@@ -58,7 +57,6 @@ public class FacultyController {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
-
     //By color
     @GetMapping(path = "/{color}/color")
     public ResponseEntity<List<Faculty>> findByColor(
@@ -67,7 +65,6 @@ public class FacultyController {
         if (listOfFacsInColor == null){return ResponseEntity.notFound().build();}
         return ResponseEntity.ok(listOfFacsInColor);
     }
-
     //Clear
     @GetMapping(path = "/clear")
     public void clear(){
