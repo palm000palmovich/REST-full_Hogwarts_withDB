@@ -2,6 +2,7 @@ package ru.hogwarts.schoolloohcs.services;
 
 import ru.hogwarts.schoolloohcs.model.Student;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface StudentService {
@@ -21,4 +22,6 @@ public interface StudentService {
     List<Student> findByAge(int age);
     //Очистка базы данных
     String clearDB();
+    //Students between min and max ages
+    List<Student> studentsBemweenAges(int min, int max);
 }

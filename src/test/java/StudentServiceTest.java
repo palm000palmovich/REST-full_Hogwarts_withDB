@@ -64,7 +64,6 @@ public class StudentServiceTest {
 
         when(studentRepository.findAll()).thenReturn(newList);
         List<Student> expected = studentService.getAllStudents();
-
         assertEquals(expected.size(), actual.size());
         assertEquals(expected, actual);
     }

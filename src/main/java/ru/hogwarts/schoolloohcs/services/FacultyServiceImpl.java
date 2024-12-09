@@ -66,4 +66,10 @@ public class FacultyServiceImpl implements FacultyService {
     //Clear data base
     @Override
     public void clearDB(){facultyRepository.deleteAll();}
+
+    //Facultys by name or color
+    @Override
+    public List<Faculty> facByColOrName(String name, String color){
+        return facultyRepository.findByNameOrColorIgnoreCase(name, color);
+    }
 }

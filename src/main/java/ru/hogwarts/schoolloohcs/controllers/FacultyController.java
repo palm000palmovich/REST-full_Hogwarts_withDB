@@ -21,8 +21,10 @@ public class FacultyController {
 
     //All facultys
     @GetMapping
-    public List<Faculty> getAll(){
-        return facultyService.getAllFacultys();
+    public ResponseEntity getAll(@RequestParam(required = false) String name,
+                                @RequestParam(required = false) String color){
+        if (name != null || color != null){return ResponseEntity.ok(facultyService.facByColOrName(name, color));}
+        return ResponseEntity.ok(facultyService.getAllFacultys());
     }
 
     //POST

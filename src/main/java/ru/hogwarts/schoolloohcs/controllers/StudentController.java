@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.schoolloohcs.model.Student;
 import ru.hogwarts.schoolloohcs.services.StudentService;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class StudentController {
 
     //Clear DB
     @GetMapping(path = "/clear")
-    public String ckearDB(){
+    public String clearDB(){
         return studentService.clearDB();
     }
 
@@ -72,4 +73,16 @@ public class StudentController {
         if (listOfStudsInAge == null){return ResponseEntity.notFound().build();}
         return ResponseEntity.ok(listOfStudsInAge);
     }
+
+    //Between age
+    @GetMapping("/ages/{min}/{max}")
+    public ResponseEntity<List<Student>> minMaxAgeStudents(
+            @PathVariable("min") int min,
+            @PathVariable("max") int max
+    ){
+        List<Student> list = studentService.studentsBemweenAges(min, max);
+        if (list == null){return ResponseEntity.notFound().build();}
+        return ResponseEntity.ok(list);
+    }
+
  }

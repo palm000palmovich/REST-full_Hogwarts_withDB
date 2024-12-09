@@ -23,7 +23,6 @@ public class FacultyServiceTest {
     private FacultyServiceImpl facultyService;
     @Mock
     private FacultyRepository facultyRepository;
-
     private Faculty faculty1;
     private Faculty faculty2;
     private Faculty faculty3;
