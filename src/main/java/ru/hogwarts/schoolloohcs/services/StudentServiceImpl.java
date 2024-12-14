@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.schoolloohcs.model.Student;
 import ru.hogwarts.schoolloohcs.repository.StudentRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,10 +66,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     //Full reset
-
     @Override
     public String clearDB(){
         studentRepository.deleteAll();
         return "База данных успешно очищена!";
     }
+
+    //Students between min and max ages
+    @Override
+    public List<Student> studentsBemweenAges(int min, int max){
+        return studentRepository.findByAgeBetween(min, max);
+    }
+
+
 }

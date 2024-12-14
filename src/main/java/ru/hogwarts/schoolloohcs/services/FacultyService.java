@@ -22,4 +22,6 @@ public interface FacultyService {
 
     //Clear data base
     void clearDB();
+
+    List<Faculty> facByColOrName(String name, String color);
 }
