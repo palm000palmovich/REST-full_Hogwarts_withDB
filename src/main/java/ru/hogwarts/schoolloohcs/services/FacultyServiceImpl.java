@@ -17,8 +17,6 @@ public class FacultyServiceImpl implements FacultyService {
         this.facultyRepository = facultyRepository;
     }
 
-
-
     //Output all facultys
     @Override
     public List<Faculty> getAllFacultys(){

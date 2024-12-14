@@ -35,7 +35,6 @@ public class StudentServiceImpl implements StudentService {
     public Student findStudent(long id){
         return studentRepository.findById(id).orElse(null);
     }
-
     //Edit students
     @Override
     public Student editStudent(long id, Student student){
@@ -46,7 +45,6 @@ public class StudentServiceImpl implements StudentService {
             return studentRepository.save(studForChange);
         } return null;
     }
-
     //Delete students
     @Override
     public Student deleteStudent(Long id){

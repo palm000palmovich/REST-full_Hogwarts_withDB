@@ -12,14 +12,12 @@ public class Student {
     private long id;
     private String name;
     private int age;
-
     public Student(){}
 
     public Student(String name, int age){
         this.name = name;
         this.age = age;
     }
-
 
     //Геттер и сеттеры
     public Long getId() {

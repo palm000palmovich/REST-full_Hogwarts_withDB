@@ -21,7 +21,6 @@ import static org.mockito.Mockito.when;
 public class FacultyServiceTest {
     @InjectMocks
     private FacultyServiceImpl facultyService;
-
     @Mock
     private FacultyRepository facultyRepository;
 
