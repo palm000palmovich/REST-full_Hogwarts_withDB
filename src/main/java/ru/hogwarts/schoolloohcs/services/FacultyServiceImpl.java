@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Service
 public class FacultyServiceImpl implements FacultyService {
     private final FacultyRepository facultyRepository;
-
     @Autowired
     public FacultyServiceImpl(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;

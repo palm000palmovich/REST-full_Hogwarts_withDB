@@ -21,7 +21,7 @@ public interface StudentService {
     //Поиск студентов по возрасту
     List<Student> findByAge(int age);
     //Очистка базы данных
-    String clearDB();
+    void clearDB();
     //Students between min and max ages
     List<Student> studentsBemweenAges(int min, int max);
 }

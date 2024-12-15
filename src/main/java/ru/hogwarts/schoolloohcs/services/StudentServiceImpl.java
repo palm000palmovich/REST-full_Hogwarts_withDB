@@ -67,9 +67,8 @@ public class StudentServiceImpl implements StudentService {
 
     //Full reset
     @Override
-    public String clearDB(){
+    public void clearDB(){
         studentRepository.deleteAll();
-        return "База данных успешно очищена!";
     }
 
     //Students between min and max ages

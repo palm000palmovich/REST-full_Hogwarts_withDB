@@ -41,7 +41,6 @@ public class FacultyController {
         if (faculty  == null){return ResponseEntity.notFound().build();}
         return ResponseEntity.ok(faculty);
     }
-
     //PUT
     @PutMapping(path = "/{id}")
     public ResponseEntity<Faculty> edit(
