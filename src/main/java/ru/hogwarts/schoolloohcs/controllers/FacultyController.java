@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.schoolloohcs.model.Faculty;
+import ru.hogwarts.schoolloohcs.model.Student;
 import ru.hogwarts.schoolloohcs.services.FacultyService;
 
 import java.util.List;
@@ -21,11 +22,15 @@ public class FacultyController {
 
     //All facultys
     @GetMapping
-    public ResponseEntity getAll(@RequestParam(required = false) String name,
+    public ResponseEntity<String> getAll(@RequestParam(required = false) String name,
                                 @RequestParam(required = false) String color){
-        if (name != null || color != null){return ResponseEntity.ok(facultyService.facByColOrName(name, color));}
-        return ResponseEntity.ok(facultyService.getAllFacultys());
+        if (name != null || color != null){return ResponseEntity.ok((facultyService.facByColOrName(name, color)).toString());}
+        List<Faculty> facultees = facultyService.getAllFacultys();
+        if (facultees.size() == 0){
+            return ResponseEntity.badRequest().body("DB of facultees is empty!");}
+        return ResponseEntity.ok(facultees.toString());
     }
+
 
     //POST
     @PostMapping
@@ -53,11 +58,14 @@ public class FacultyController {
 
     //DELETE
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity delete(
+    public ResponseEntity<Faculty> delete(
             @PathVariable("id") long id){
-        facultyService.deleteFaculty(id);
-        return ResponseEntity.ok().build();
+        Faculty fac = facultyService.deleteFaculty(id);
+        if (fac == null){return ResponseEntity.notFound().build();}
+        return ResponseEntity.ok(fac);
     }
+
+
     //By color
     @GetMapping(path = "/{color}/color")
     public ResponseEntity<List<Faculty>> findByColor(

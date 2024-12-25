@@ -1,9 +1,20 @@
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import ru.hogwarts.schoolloohcs.SchoolloohcsApplication;
+import ru.hogwarts.schoolloohcs.controllers.FacultyController;
+import ru.hogwarts.schoolloohcs.controllers.StudentController;
 import ru.hogwarts.schoolloohcs.model.Faculty;
 import ru.hogwarts.schoolloohcs.model.Student;
 import ru.hogwarts.schoolloohcs.repository.FacultyRepository;
@@ -17,64 +28,65 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = SchoolloohcsApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FacultyServiceTest {
-    @InjectMocks
-    private FacultyServiceImpl facultyService;
-    @Mock
-    private FacultyRepository facultyRepository;
-    private Faculty faculty1;
-    private Faculty faculty2;
-    private Faculty faculty3;
-    private List<Faculty> actual;
+    @LocalServerPort
+    private int port;
 
-    @BeforeEach
-    public void setUp(){
-        this.faculty1 = new Faculty();
-        faculty1.setId(1L);
-        faculty1.setName("Harry Poopter");
-        faculty1.setColor("Red");
+    @Autowired
+    private FacultyController facultyController;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-        this.faculty2 = new Faculty();
-        faculty2.setId(2L);
-        faculty2.setName("Hermoine Reinger");
-        faculty2.setColor("Brown");
-
-        this.faculty3 = new Faculty();
-        faculty3.setId(3L);
-        faculty3.setName("Ron Grizzly");
-        faculty3.setColor("Blue");
-
-        this.actual = new ArrayList<>();
-        actual.add(faculty1);
-        actual.add(faculty2);
-        actual.add(faculty3);
+    @Test
+    public void controllerIsNotNull() throws Exception{
+        Assertions.assertThat(facultyController).isNotNull();
     }
 
     @Test
-    public void getAllStudentsTest(){
-        List<Faculty> newList = new ArrayList<>();
-        newList.add(faculty1);
-        newList.add(faculty2);
-        newList.add(faculty3);
-
-        when(facultyRepository.findAll()).thenReturn(newList);
-        List<Faculty> expected = facultyService.getAllFacultys();
-
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected, actual);
+    public void testGet() throws Exception{
+        Assertions
+                .assertThat(this.restTemplate.getForObject(
+                        "http://localhost:" + port + "/faculty", String.class))
+                .isNotNull();
     }
 
     @Test
-    void testFindById() {
-        Faculty faculty= new Faculty();
-        faculty.setId(1L);
-        faculty.setName("Griffindor");
+    public void testPost() throws Exception{
+        Faculty faculty = new Faculty();
+        faculty.setId(6L);
+        faculty.setName("Gey");
+        faculty.setColor("Blue");
 
-        when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
+        Assertions
+                .assertThat(this.restTemplate.postForObject(
+                        "http://localhost:" + port + "/faculty", faculty, String.class
+                )).isNotNull();
+    }
 
-        Faculty foundFaculty = facultyService.findById(1L);
-        assertNotNull(foundFaculty);
-        assertEquals("Griffindor", foundFaculty.getName());
+    @Test
+    public void testPut() throws Exception{
+        Long facultytId = 1L;
+        Faculty updatedFaculty = new Faculty();
+        updatedFaculty.setName("New Name");
+        updatedFaculty.setColor("brown");
+
+        final String BASE_URL = "/faculty/";
+
+
+        HttpEntity<Faculty> requestEntity = new HttpEntity<>(updatedFaculty);
+
+        ResponseEntity<Faculty> responseEntity = restTemplate.exchange(
+                BASE_URL + facultytId,
+                HttpMethod.PUT,
+                requestEntity,
+                Faculty.class
+        );
+
+        Assertions.assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
+        Assertions.assertThat(responseEntity.getBody()).isNotNull();
+        Assertions.assertThat(responseEntity.getBody().getName()).isEqualTo("New Name");
+        Assertions.assertThat(responseEntity.getBody().getColor()).isEqualTo(25);
+
     }
 }

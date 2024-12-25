@@ -79,6 +79,7 @@ public class AvatarService {
 
             ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
             return baos.toByteArray();
+
         }
     }
 

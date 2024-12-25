@@ -1,17 +1,18 @@
 package ru.hogwarts.schoolloohcs.services;
 
+import org.springframework.http.ResponseEntity;
 import ru.hogwarts.schoolloohcs.model.Faculty;
 
 import java.util.List;
 
 public interface FacultyService {
     //Output all facultys
-    List<Faculty> getAllFacultys();
+   List<Faculty> getAllFacultys();
 
     //Create faculty
     Faculty createFaculty(Faculty faculty);
     //Delete faculty
-    void deleteFaculty(long id);
+    Faculty deleteFaculty(long id);
 
     //Edit faculty
     Faculty editFaculty(long id, Faculty faculty);

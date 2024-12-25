@@ -33,10 +33,13 @@ public class StudentController {
         this.studentService = studentService;
         this.avatarService = avatarService;
     }
+
     //Output of students
     @GetMapping
-    public List<Student> allStudents(){
-        return studentService.getAllStudents();
+    public ResponseEntity<String> allStudents(){
+        List<Student> students = studentService.getAllStudents();
+        if (students.size() == 0){return ResponseEntity.badRequest().body("DB of students is empty!");}
+        return ResponseEntity.ok(students.toString());
     }
 
     //Clear DB
@@ -67,8 +70,8 @@ public class StudentController {
             @PathVariable("id") long id,
             @RequestBody Student student){
         Student stud = studentService.editStudent(id, student);
-        if (stud == null){ResponseEntity.notFound().build();}
-        return ResponseEntity.ok(studentService.editStudent(id, student));
+        if (stud == null){return ResponseEntity.notFound().build();}
+        return ResponseEntity.ok(stud);
     }
 
     //DELETE
