@@ -1,84 +1,80 @@
-import org.junit.jupiter.api.BeforeEach;
+
+import org.assertj.core.api.Assertions;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import ru.hogwarts.schoolloohcs.SchoolloohcsApplication;
+import ru.hogwarts.schoolloohcs.controllers.StudentController;
 import ru.hogwarts.schoolloohcs.model.Student;
-import ru.hogwarts.schoolloohcs.repository.StudentRepository;
-import ru.hogwarts.schoolloohcs.services.StudentService;
-import ru.hogwarts.schoolloohcs.services.StudentServiceImpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+@SpringBootTest(classes = SchoolloohcsApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
-import static org.hamcrest.Matchers.any;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
 public class StudentServiceTest {
-    @InjectMocks
-    private StudentServiceImpl studentService;
+    @LocalServerPort
+    private int port;
 
-    @Mock
-    private StudentRepository studentRepository;
+    @Autowired
+    private StudentController studentController;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-    private Student student1;
-    private Student student2;
-    private Student student3;
-    private List<Student> actual;
-
-    @BeforeEach
-    public void setUp(){
-        this.student1 = new Student();
-        student1.setId(1L);
-        student1.setName("Harry Poopter");
-        student1.setAge(21);
-
-        this.student2 = new Student();
-        student2.setId(2L);
-        student2.setName("Hermoine Reinger");
-        student2.setAge(32);
-
-        this.student3 = new Student();
-        student3.setId(3L);
-        student3.setName("Ron Grizzly");
-        student3.setAge(32);
-
-        this.actual = new ArrayList<>();
-        actual.add(student1);
-        actual.add(student2);
-        actual.add(student3);
+    @Test
+    public void controllerIsNotNull() throws Exception {
+        Assertions.assertThat(studentController).isNotNull();
     }
 
     @Test
-    public void getAllStudentsTest(){
-        List<Student> newList = new ArrayList<>();
-        newList.add(student1);
-        newList.add(student2);
-        newList.add(student3);
-
-        when(studentRepository.findAll()).thenReturn(newList);
-        List<Student> expected = studentService.getAllStudents();
-
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected, actual);
+    public void testGetStudents() throws Exception {
+        Assertions
+                .assertThat(this.restTemplate.getForObject(
+                        "http://localhost:" + port + "/student", String.class))
+                .isNotNull();
     }
+
     @Test
-    void testFindByIdTest() {
+    public void testPostStudent() throws Exception {
         Student student = new Student();
-        student.setId(1L);
-        student.setName("Harry Potter");
+        student.setId(1l);
+        student.setName("German");
+        student.setAge(25);
 
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
-
-        Student foundStudent = studentService.findStudent(1L);
-        assertNotNull(foundStudent);
-        assertEquals("Harry Potter", foundStudent.getName());
+        Assertions
+                .assertThat(this.restTemplate.postForObject(
+                        "http://localhost:" + port + "/student", student, String.class
+                )).isNotNull();
     }
+
+    @Test
+    public void testPut() throws Exception {
+        Long studentId = 1L;
+        Student updatedStudent = new Student();
+        updatedStudent.setName("New Name");
+        updatedStudent.setAge(25);
+
+        final String BASE_URL = "/student/";
+
+
+        HttpEntity<Student> requestEntity = new HttpEntity<>(updatedStudent);
+
+        ResponseEntity<Student> responseEntity = restTemplate.exchange(
+                BASE_URL + studentId,
+                HttpMethod.PUT,
+                requestEntity,
+                Student.class
+        );
+
+        Assertions.assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
+        Assertions.assertThat(responseEntity.getBody()).isNotNull();
+        Assertions.assertThat(responseEntity.getBody().getName()).isEqualTo("New Name");
+        Assertions.assertThat(responseEntity.getBody().getAge()).isEqualTo(25);
+
+    }
+
 
 }

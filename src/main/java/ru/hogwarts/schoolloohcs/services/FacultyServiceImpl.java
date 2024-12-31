@@ -1,17 +1,18 @@
 package ru.hogwarts.schoolloohcs.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.schoolloohcs.model.Faculty;
 import ru.hogwarts.schoolloohcs.repository.FacultyRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
     private final FacultyRepository facultyRepository;
-
     @Autowired
     public FacultyServiceImpl(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
@@ -31,8 +32,11 @@ public class FacultyServiceImpl implements FacultyService {
 
     //Delete faculty
     @Override
-    public void deleteFaculty(long id){
-        facultyRepository.deleteById(id);
+    public Faculty deleteFaculty(long id){
+        Faculty fac = facultyRepository.findById(id).orElse(null);
+        if (fac != null){
+            facultyRepository.deleteById(id);
+        } return fac;
     }
 
     //Edit faculty
@@ -66,4 +70,10 @@ public class FacultyServiceImpl implements FacultyService {
     //Clear data base
     @Override
     public void clearDB(){facultyRepository.deleteAll();}
+
+    //Facultys by name or color
+    @Override
+    public List<Faculty> facByColOrName(String name, String color){
+        return facultyRepository.findByNameOrColorIgnoreCase(name, color);
+    }
 }
