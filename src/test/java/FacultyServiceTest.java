@@ -39,12 +39,12 @@ public class FacultyServiceTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void controllerIsNotNull() throws Exception{
+    public void controllerIsNotNull() throws Exception {
         Assertions.assertThat(facultyController).isNotNull();
     }
 
     @Test
-    public void testGet() throws Exception{
+    public void testGet() throws Exception {
         Assertions
                 .assertThat(this.restTemplate.getForObject(
                         "http://localhost:" + port + "/faculty", String.class))
@@ -52,7 +52,7 @@ public class FacultyServiceTest {
     }
 
     @Test
-    public void testPost() throws Exception{
+    public void testPost() throws Exception {
         Faculty faculty = new Faculty();
         faculty.setId(6L);
         faculty.setName("Gey");
@@ -65,7 +65,7 @@ public class FacultyServiceTest {
     }
 
     @Test
-    public void testPut() throws Exception{
+    public void testPut() throws Exception {
         Long facultytId = 1L;
         Faculty updatedFaculty = new Faculty();
         updatedFaculty.setName("New Name");

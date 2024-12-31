@@ -19,7 +19,6 @@ import ru.hogwarts.schoolloohcs.services.AvatarService;
 import ru.hogwarts.schoolloohcs.services.StudentServiceImpl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(StudentController.class)
-public class StudentTestWithMock {
+public class StudentMockTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -48,7 +47,7 @@ public class StudentTestWithMock {
     private JSONObject jsonObject = new JSONObject();
 
     @BeforeEach
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         final Long id = 1L;
         final String name = "Man";
         final int age = 38;
@@ -63,15 +62,15 @@ public class StudentTestWithMock {
     }
 
     @Test
-    public void saveStudentsTest() throws Exception{
+    public void saveStudentsTest() throws Exception {
 
         when(studentRepository.save(any(Student.class))).thenReturn(student);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/student")
-                .content(jsonObject.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .post("/student")
+                        .content(jsonObject.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(student.getId()))
                 .andExpect(jsonPath("$.name").value(student.getName()))
@@ -80,17 +79,17 @@ public class StudentTestWithMock {
     }
 
     @Test
-    public void getAllStudentsTest() throws Exception{
+    public void getAllStudentsTest() throws Exception {
         when(studentService.getAllStudents()).thenReturn(List.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student")
                         .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void getAllStudentsIfDBisEmpty() throws Exception{
+    public void getAllStudentsIfDBisEmpty() throws Exception {
         List<Student> emptyListOfStudents = new ArrayList<>();
 
         when(studentService.getAllStudents()).thenReturn(emptyListOfStudents);
@@ -104,7 +103,7 @@ public class StudentTestWithMock {
     }
 
     @Test
-    public void getStudentsFindByIdTest() throws Exception{
+    public void getStudentsFindByIdTest() throws Exception {
 
         when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
 
@@ -118,7 +117,7 @@ public class StudentTestWithMock {
     }
 
     @Test
-    public void studentIsNotFoundTest() throws Exception{
+    public void studentIsNotFoundTest() throws Exception {
         when(studentService.findStudent(any(Long.class))).thenReturn(null);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -129,7 +128,7 @@ public class StudentTestWithMock {
     }
 
     @Test
-    public void editStudentTest() throws Exception{
+    public void editStudentTest() throws Exception {
         final long newId = 1L;
         final String newName = "Max";
         final int newAge = 21;
@@ -149,9 +148,9 @@ public class StudentTestWithMock {
         when(studentService.editStudent(newId, newStudent)).thenReturn(newStudent);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/student/{id}", newId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(newJsonStudent.toString()))
+                        .put("/student/{id}", newId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newJsonStudent.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(newId))
                 .andExpect(jsonPath("$.name").value(newName))
@@ -160,7 +159,7 @@ public class StudentTestWithMock {
     }
 
     @Test
-    public void editStudentIs404() throws Exception{
+    public void editStudentIs404() throws Exception {
         final long studId = 1L;
         final String newName = "Nut";
         final int newAge = 124;
@@ -175,7 +174,7 @@ public class StudentTestWithMock {
                         .put("/student/{id}", studId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonObject.toString()))
-                        .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound());
     }
 
 
@@ -193,7 +192,7 @@ public class StudentTestWithMock {
     }
 
     @Test
-    public void studentForDeleteIsNotFound() throws Exception{
+    public void studentForDeleteIsNotFound() throws Exception {
         when(studentService.deleteStudent(1L)).thenReturn(null);
 
         mockMvc.perform(MockMvcRequestBuilders
