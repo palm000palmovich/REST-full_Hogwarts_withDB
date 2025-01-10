@@ -34,7 +34,7 @@ public class FacultyController {
 
     //POST
     @PostMapping
-    public ResponseEntity<Faculty> create(
+        public ResponseEntity<Faculty> create(
             @RequestBody Faculty faculty){
         return ResponseEntity.ok(facultyService.createFaculty(faculty));
     }
@@ -79,4 +79,6 @@ public class FacultyController {
     public void clear(){
         facultyService.clearDB();
     }
+
+
 }

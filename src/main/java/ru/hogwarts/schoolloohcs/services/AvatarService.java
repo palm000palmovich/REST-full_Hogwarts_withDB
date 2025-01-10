@@ -3,6 +3,7 @@ package ru.hogwarts.schoolloohcs.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.schoolloohcs.model.Avatar;
@@ -11,6 +12,7 @@ import ru.hogwarts.schoolloohcs.repository.AvatarRepository;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
@@ -81,6 +83,12 @@ public class AvatarService {
             return baos.toByteArray();
 
         }
+    }
+
+    //Get all avatars
+    public List<Avatar> getAllAvatars(int pageNumber, int pageSize){
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
+        return avatarRepository.findAll(pageRequest).getContent();
     }
 
 

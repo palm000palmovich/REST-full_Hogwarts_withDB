@@ -1,6 +1,8 @@
 package ru.hogwarts.schoolloohcs.services;
 
+import org.hibernate.annotations.DialectOverride;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.schoolloohcs.model.Faculty;
@@ -87,6 +89,24 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> studentsBemweenAges(int min, int max){
         return studentRepository.findByAgeBetween(min, max);
+    }
+
+    //Count of students
+    @Override
+    public int getCountOfStudent(){
+        return studentRepository.getCountOfStudents();
+    }
+
+    //Avarage age of students
+    @Override
+    public float getAvgAge(){
+        return studentRepository.getAvgAge();
+    }
+
+    //Get last 5 students
+    @Override
+    public List<Student> getLast5Students(){
+        return studentRepository.getLast5Students();
     }
 
 
