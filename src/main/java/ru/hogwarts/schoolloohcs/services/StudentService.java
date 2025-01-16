@@ -24,4 +24,13 @@ public interface StudentService {
     void clearDB();
     //Students between min and max ages
     List<Student> studentsBemweenAges(int min, int max);
+    //count of unique students
+    int getCountOfStudent();
+
+    //Avarage age
+    float getAvgAge();
+
+    //Last 5 students
+    List<Student> getLast5Students();
+
 }

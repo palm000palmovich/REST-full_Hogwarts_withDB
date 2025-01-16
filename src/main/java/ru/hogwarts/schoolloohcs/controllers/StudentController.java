@@ -61,6 +61,7 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<Student> createStud(
             @RequestBody Student student){
+        System.out.println(student.getName() + " " + student.getAge());
         return ResponseEntity.ok(studentService.createStudent(student));
     }
 
@@ -148,6 +149,38 @@ public class StudentController {
     @GetMapping("/avatar/clear")
     public void clearAvatars(){
         avatarService.clearDBAvatar();
+    }
+
+    //Get count of students
+    @GetMapping(path = "/count-of-students")
+    public  ResponseEntity<Integer> getCount(){
+        Integer count = studentService.getCountOfStudent();
+        if (count == 0){return ResponseEntity.noContent().build();}
+        return ResponseEntity.ok(count);
+    }
+
+    //Avarage age
+    @GetMapping(path = "/avarage-age")
+    public ResponseEntity<Float> avgAge(){
+        float avgAge = studentService.getAvgAge();
+        if (avgAge == 0.0f){return ResponseEntity.noContent().build();}
+        return ResponseEntity.ok(avgAge);
+    }
+
+    //Last 5 students
+    @GetMapping(path = "/last-5")
+    public ResponseEntity<List<Student>> last5Students(){
+        List<Student> list = studentService.getLast5Students();
+        if (list == null){return ResponseEntity.noContent().build();}
+        return ResponseEntity.ok(list);
+    }
+
+    //Get All avatars with pagination
+    @GetMapping(path = "/avatars/{number}/{size}")
+    public ResponseEntity<List<Avatar>> allAvs(@PathVariable("number") int number,
+                                               @PathVariable("size") int size){
+        List<Avatar> listOfAvatars = avatarService.getAllAvatars(number, size);
+        return ResponseEntity.ok(listOfAvatars);
     }
 
 }

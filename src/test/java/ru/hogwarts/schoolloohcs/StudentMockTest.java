@@ -1,5 +1,6 @@
 package ru.hogwarts.schoolloohcs;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts.schoolloohcs.controllers.StudentController;
+import ru.hogwarts.schoolloohcs.model.Avatar;
 import ru.hogwarts.schoolloohcs.model.Student;
 import ru.hogwarts.schoolloohcs.repository.AvatarRepository;
 import ru.hogwarts.schoolloohcs.repository.StudentRepository;
@@ -214,4 +216,60 @@ public class StudentMockTest {
                 .andExpect(result -> result.getResponse().getContentAsString()
                         .contains("File is too big!"));
     }
+
+    @Test
+    public void getCountOfStudentsTest() throws Exception{
+        when(studentService.getCountOfStudent()).thenReturn(2);
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/student/count-of-students")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void  getCountOfStudentsIsNullTest() throws Exception{
+        when(studentService.getCountOfStudent()).thenReturn(0);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/count-of-students")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+
+    @Test
+    public void avarageAgeTest() throws Exception{
+        when(studentService.getAvgAge()).thenReturn(2.3f);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/avarage-age")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void avarageAgeIsNullTest() throws Exception{
+        when(studentService.getAvgAge()).thenReturn(0.0f);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/avarage-age")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void last5StudentsTest() throws Exception{
+        List<Student> last5Students = List.of(student, student, student, student, student);
+        when(studentService.getLast5Students()).thenReturn(last5Students);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/last-5")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void last5StudentsIsNullTest() throws Exception{
+        when(studentService.getLast5Students()).thenReturn(null);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/last-5")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
 }
