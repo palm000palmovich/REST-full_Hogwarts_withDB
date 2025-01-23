@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: course-four-lesson-three/scripts/faculty.sql
+  - include:
+      file: course-four-lesson-three/scripts/students.sql
