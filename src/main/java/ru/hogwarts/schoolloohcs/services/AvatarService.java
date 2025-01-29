@@ -1,6 +1,8 @@
 package ru.hogwarts.schoolloohcs.services;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class AvatarService {
     @Value("${schoolloohcs.avatar.dir.path}")
     private String avatarsDir;  //path to avatars
+    Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     private final StudentServiceImpl studentService;
     private final AvatarRepository avatarRepository;
@@ -42,6 +45,7 @@ public class AvatarService {
     //Add avatar
     public void uploadAvatar(long studentId,
                              MultipartFile file) throws IOException {
+        logger.debug("Was invoked method for upload new cover");
         Student student = studentService.findStudent(studentId);
         Path filePath = Path.of(avatarsDir, studentId + getExtension(file.getOriginalFilename()));
 
@@ -68,6 +72,7 @@ public class AvatarService {
 
     //generateData
     private byte[] generateImageData(Path filePath) throws IOException{
+        logger.debug("Was invoked method for create an image of cover");
         try (InputStream is = Files.newInputStream(filePath);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              ByteArrayOutputStream baos = new ByteArrayOutputStream();){
@@ -87,6 +92,7 @@ public class AvatarService {
 
     //Get all avatars
     public List<Avatar> getAllAvatars(int pageNumber, int pageSize){
+        logger.debug("Was invoked method for get all avatars");
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
@@ -94,16 +100,20 @@ public class AvatarService {
 
 
     public Avatar findAvatar(long studentId){
+        logger.debug("Was invoked method for get cover by student's id");
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
     //file extension
     public String getExtension(String fileName){
+
+        logger.debug("Was invoked method for get extension of file");
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
     //Clear DB
     public void clearDBAvatar(){
+        logger.debug("Was invoked method to clear DB");
         avatarRepository.deleteAll();
     }
 
