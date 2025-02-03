@@ -33,4 +33,8 @@ public interface StudentService {
     //Last 5 students
     List<Student> getLast5Students();
 
+    List<String> studentsWithAinStartOfName();
+
+    double getAvgAgeThroughStreams();
+
 }

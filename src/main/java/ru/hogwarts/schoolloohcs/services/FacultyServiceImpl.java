@@ -10,7 +10,9 @@ import ru.hogwarts.schoolloohcs.repository.FacultyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
@@ -90,5 +92,25 @@ public class FacultyServiceImpl implements FacultyService {
     public List<Faculty> facByColOrName(String name, String color){
         logger.debug("Was invoked method to find faculty by name or color");
         return facultyRepository.findByNameOrColorIgnoreCase(name, color);
+    }
+
+    @Override
+    public Optional<Faculty> getLongestNameOfFaculty(){
+        int maxLength = 0;
+        Optional<Faculty> longestFaculty = facultyRepository.findAll().parallelStream()
+                .max((f1, f2) -> Integer.compare(f1.getName().length(), f2.getName().length()));
+        return longestFaculty;
+    }
+
+    @Override
+    public int randomExpression(){
+        long startTime = System.currentTimeMillis();
+        int num =  Stream.iterate(1, a -> a +1)
+                .parallel()
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b);
+        long finishTime = System.currentTimeMillis();
+        logger.debug("Running time: " + (finishTime - startTime) + " ms.");
+        return num;
     }
 }

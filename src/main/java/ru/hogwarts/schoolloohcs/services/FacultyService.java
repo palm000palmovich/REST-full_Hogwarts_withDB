@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import ru.hogwarts.schoolloohcs.model.Faculty;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FacultyService {
     //Output all facultys
@@ -24,4 +25,6 @@ public interface FacultyService {
     //Clear data base
     void clearDB();
     List<Faculty> facByColOrName(String name, String color);
+    Optional<Faculty> getLongestNameOfFaculty();
+    int randomExpression();
 }
