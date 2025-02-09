@@ -9,6 +9,7 @@ import ru.hogwarts.schoolloohcs.model.Student;
 import ru.hogwarts.schoolloohcs.services.FacultyService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/faculty")
@@ -81,4 +82,12 @@ public class FacultyController {
     }
 
 
+    @GetMapping(path = "/longestFaculty")
+    public Optional<Faculty> getFacWihLongestName(){
+        return facultyService.getLongestNameOfFaculty();
+    }
+
+    @GetMapping("/randomExpression")
+    public int getRexpression(){
+        return facultyService.randomExpression();    }
 }

@@ -10,7 +10,10 @@ import ru.hogwarts.schoolloohcs.repository.AvatarRepository;
 import ru.hogwarts.schoolloohcs.repository.StudentRepository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -29,7 +32,7 @@ public class StudentServiceImpl implements StudentService {
     //Output students
     @Override
     public List<Student> getAllStudents(){
-        logger.debug("Was invoked method for output all students: " + studentRepository.findAll());
+        logger.debug("Was invoked method for output all students");
         return studentRepository.findAll();
     }
 
@@ -119,6 +122,36 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getLast5Students(){
         logger.debug("Was invoked method to output 5 last students");
         return studentRepository.getLast5Students();
+    }
+
+    @Override
+    public List<String> studentsWithAinStartOfName(){
+        logger.info("Invoked method studentsWithAinStartOfName");
+        long startTime = System.currentTimeMillis();
+        List<String> studsList =  studentRepository.findAll().parallelStream()
+                .map(Student::getName)
+                .filter(name -> name.startsWith("A"))
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+        long finishTime = System.currentTimeMillis();
+        logger.debug("Running time: " + (finishTime - startTime) + " ms.");
+        return studsList;
+    }
+
+    @Override
+    public double getAvgAgeThroughStreams(){
+        int sum = 0;
+        logger.info("Invoked method getAvgAgeThroughStreams");
+        long startTime = System.currentTimeMillis();
+        double avgAge = studentRepository
+                .findAll()
+                .parallelStream()
+                .mapToInt(stud -> stud.getAge())
+                .average().orElse(0);
+        long finishTime = System.currentTimeMillis();
+        logger.debug("Running time: " + (finishTime - startTime) + " ms.");
+        return avgAge;
     }
 
 
