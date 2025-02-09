@@ -36,5 +36,8 @@ public interface StudentService {
     List<String> studentsWithAinStartOfName();
 
     double getAvgAgeThroughStreams();
+    void getParallelThreadOfStudents();
 
+    int getSizeOfDB();
+    void getSynhronizedParallelThreadOfStudents();
 }

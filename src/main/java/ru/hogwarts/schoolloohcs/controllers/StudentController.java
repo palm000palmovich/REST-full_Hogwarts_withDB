@@ -220,4 +220,20 @@ public class StudentController {
         }
         return ResponseEntity.ok(studentService.getAvgAgeThroughStreams());
     }
+
+    @GetMapping(path = "/print-parallel")
+    public ResponseEntity<Void> getParallelStudents(){
+        studentService.getParallelThreadOfStudents();
+        long size = studentService.getSizeOfDB();
+        if (size != 0){
+            return ResponseEntity.ok().build();
+        } else{return ResponseEntity.badRequest().build();}
+
+    }
+
+    @GetMapping(path = "/print-synchronized")
+    public ResponseEntity<Void> getParallelSynhronizedStudents(){
+        studentService.getSynhronizedParallelThreadOfStudents();
+        return ResponseEntity.ok().build();
+    }
 }
